@@ -123,6 +123,52 @@ EXPECT_EQ()
 
 CTest là tool CMake để quản lý Test
 
+IV. Tạo CI với GitHub Actions
+
+1. Tạo file ci.yml trong .github/workflows
+
+on:
+```
+on:
+  push:
+    branches:
+      - main
+
+    pull_request:
+    branches:
+        - main
+```
+Khi có push vào nhánh main thì chạy CI
+Khi có PR vào merger vào nhánh main cũng chạy CI
+
+jobs:
+```
+jobs:
+├── build-and-test
+├── static-analysis
+├── windows-build
+└── release
+```
+
+```
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+    // GitHub sẽ tạo ra một máy Ubuntu tạm thời để chạy CI.
+    // Sau khi job kết thúc, machine này sẽ bị hủy
+```
+
+2. Push lên GitHub
+
+
+
+
+
+
+
+
+
 
 
 
