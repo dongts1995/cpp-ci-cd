@@ -91,6 +91,39 @@ III. Add UnitTest with GoogleTest
 
 Build Cmake again, and run to see a result
 
+2. Add GoogleTest
+
+Sử dụng 'FetchContent' cho practice
+
+- Update CMakeLists.txt
+
+- Tạo UnitTest: CalculatorTest.cpp
+
+- Build:
+
+```
+Remove-Item -Recurse -Force build
+cmake -S . -B build
+cmake --build build
+```
+
+- Run Test
+
+```
+cmake --build build
+```
+
+Knowledge:
+
+GoogleTest là framework để viết test
+```
+TEST()
+EXPECT_EQ()
+```
+
+CTest là tool CMake để quản lý Test
+
+
 
 
 
