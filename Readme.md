@@ -161,7 +161,9 @@ jobs:
 
 2. Push lên GitHub
 
+3. Xem CI chạy
 
+4. Thử nghiệm CI fail -> Sửa UnitTest
 
 
 
