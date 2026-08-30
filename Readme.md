@@ -163,7 +163,35 @@ jobs:
 
 3. Xem CI chạy
 
-4. Thử nghiệm CI fail -> Sửa UnitTest
+4. Thử nghiệm CI fail -> Sửa UnitTest -> Push lên git
+
+5. Sửa lại cho đúng rồi push lên git
+
+-> Pipeline hiện tại 
+
+```
+                  GitHub
+                     │
+              git push / PR
+                     │
+                     ▼
+              ┌─────────────┐
+              │ C++ CI       │
+              └──────┬──────┘
+                     │
+                     ▼
+             Ubuntu Runner
+                     │
+             ┌───────┴────────┐
+             ▼                ▼
+         CMake Build       CTest
+             │                │
+             └───────┬────────┘
+                     ▼
+                 PASS / FAIL
+```
+
+
 
 
 
