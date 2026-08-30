@@ -85,4 +85,12 @@ git commit -m "Initial C++ project with CMake"
 
 4. Connect local with github
 
+III. Add UnitTest with GoogleTest
+
+1. Tạo class Calculator -> see change in git commit
+
+Build Cmake again, and run to see a result
+
+
+
 

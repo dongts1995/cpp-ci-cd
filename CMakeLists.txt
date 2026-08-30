@@ -7,4 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(cpp_ci_cd
     src/main.cpp
+    src/Calculator.cpp
+)
+
+target_include_directories(cpp_ci_cd
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
 )
