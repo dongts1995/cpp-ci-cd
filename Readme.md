@@ -73,3 +73,16 @@ Makefile
 *.exe
 *.out
 ```
+
+2. init git and commit
+```
+git init
+git add .
+git commit -m "Initial C++ project with CMake"
+```
+
+3. Tạo repo trên github
+
+4. Connect local with github
+
+
