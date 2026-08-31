@@ -1,0 +1,9 @@
+Checks: >
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  readability-*,
+  -readability-identifier-length
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(include|src|tests)/'

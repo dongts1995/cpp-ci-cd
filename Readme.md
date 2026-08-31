@@ -231,6 +231,74 @@ Sau đó format lại:
 clang-format -i src/Calculator.cpp
 ```
 
+VI. clang-tidy Static Analysis
+
+1. Kiểm tra clang-tidy local
+```
+clang-tidy --version
+```
+
+2. Tạo .clang-tidy
+
+```
+Checks: >
+  bugprone-*,   ------------> Tìm những code pattern có khả năng gây bug
+  performance-*,      --------> Tìm những đoạn code có thể gây vấn đề performance
+  modernize-*,        --------> Gợi ý dùng C++ hiện đại hơn
+  readability-*,      --------> Kiểm tra readability/code practice
+  -readability-identifier-length
+
+WarningsAsErrors: ''    ----------> Warning k làm CI fail
+HeaderFilterRegex: '^(include|src|tests)/'
+```
+
+3. Chạy clang-tidy local
+```
+cmake -S . -B build
+cmake --build build
+```
+```
+clang-tidy \
+    src/Calculator.cpp \
+    -- \
+    -Iinclude
+```
+hoặc:
+```
+clang-tidy src/Calculator.cpp -- -Iinclude
+```
+
+4. Bật compile_commands.json
+
+update CMakeLists.txt
+
+```
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+```
+
+Sau đó xóa build và build lại bằng Ninja để tạo file compile_commands.json.
+
+Nếu chưa có Ninja -> cài nó
+
+```
+Remove-Item -Recurse -Force build
+cmake -S . -B build -G "Ninja"
+cmake --build build
+```
+
+Expected -> thấy file compile_commands.json tại build/
+
+5. Chạy clang-tidy bằng compile database
+
+```
+clang-tidy -p build src/Calculator.cpp
+```
+
+-p build: lấy copile config từ build/compile_commands.json
+
+6. Thêm clang-tidy vào CI.yml
+
+
 
 
 
