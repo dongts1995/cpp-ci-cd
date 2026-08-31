@@ -298,6 +298,20 @@ clang-tidy -p build src/Calculator.cpp
 
 6. Thêm clang-tidy vào CI.yml
 
+VII. Multi platform CI
+
+Update ci.yml
+
+- Thay vì tạo 2 yml -> sử dụng matrix
+
+- fail-fast: false ---> Fail vẫn chạy tiếp
+
+- Lưu ý quan trọng
+
++ Step format hiện tại dùng 'find' 'xargs' -> chỉ dùng cho Ubuntu
+
++ Nên cần thêm điều kiện 'if' vào clang-format và clang-tidy
+
 
 
 

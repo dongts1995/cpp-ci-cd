@@ -12,7 +12,15 @@ on:
 jobs:
   build-and-test:
 
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+    runs-on: ${{ matrix.os }}
 
     steps:
 
@@ -29,14 +37,15 @@ jobs:
         run: ctest --test-dir build --output-on-failure
 
       - name: Check code formatting
+        if: runner.os == 'Linux'
         run: |
-          clang-format --version
-
           find src include tests \
             -type f \
             \( -name "*.cpp" -o -name "*.h" \) \
             -print0 | xargs -0 clang-format --dry-run --Werror
+
       - name: Run clang-tidy
+        if: runner.os == 'Linux'
         run: |
           clang-tidy \
             -p build \
