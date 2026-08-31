@@ -224,6 +224,8 @@ Nếu có lỗi -> báo lỗi. Hãy thử tạo lỗi để xem kqua
 
 6. Push lên git
 
+7. Cố tình làm CI fail
+
 
 
 
