@@ -226,6 +226,12 @@ Nếu có lỗi -> báo lỗi. Hãy thử tạo lỗi để xem kqua
 
 7. Cố tình làm CI fail
 
+Sau đó format lại:
+```
+clang-format -i src/Calculator.cpp
+```
+
+
 
 
 
