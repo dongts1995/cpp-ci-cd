@@ -5,9 +5,7 @@ int main()
 {
     Calculator calculator;
 
-    std::cout << "2 + 3 = "
-              << calculator.add(2, 3)
-              << std::endl;
+    std::cout << "2 + 3 = " << calculator.add(2, 3) << std::endl;
 
     return 0;
 }

@@ -191,6 +191,29 @@ jobs:
                  PASS / FAIL
 ```
 
+V. Code Formatting với clang-format.
+
+CI sẽ kiểm tra code có tuân thủ code style không?
+
+1. Cài clang-format ở local
+
+Cài đến khi có thể chạy
+```
+clang-format --version
+```
+
+2. Tạo file .clang-format
+
+3. Format toàn bộ code
+
+powershell sau, sau đó commit
+```
+Get-ChildItem -Path . -Include *.cpp,*.h -Recurse |
+ForEach-Object {
+    clang-format -i $_.FullName
+}
+```
+
 
 
 
