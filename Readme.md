@@ -214,6 +214,17 @@ ForEach-Object {
 }
 ```
 
+4. Kiểm tra format local
+```
+clang-format --dry-run --Werror src/main.cpp
+```
+Nếu có lỗi -> báo lỗi. Hãy thử tạo lỗi để xem kqua
+
+5. Thêm Format Check vào GitHub Actions -> thêm vào ci.yml
+
+6. Push lên git
+
+
 
 
 
