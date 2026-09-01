@@ -1,0 +1,359 @@
+Step to practice
+
+I. Create project
+
+1. Create file src/main.cpp
+```
+#include <iostream>
+
+int main() {
+    std::cout << "Hello CI/CD Project!" << std::endl;
+    return 0;
+}
+```
+
+2. Create CMakeLists.txt
+```
+cmake_minimum_required(VERSION 3.20)
+
+project(CppCiCdProject VERSION 1.0.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_executable(cpp_ci_cd
+    src/main.cpp
+)
+```
+
+3. Build
+
+3.1 Generate Build system
+
+```
+cmake -S . -B build
+```
+
+'-S .' : Source . -> source directory là '.'
+'-B build' : Build build: build directory là 'build'
+
+3.2 Compiler Project
+
+main.cpp -> Compiler -> main.obj/main.o -> Linker -> cpp_ci_cd.exe
+
+```
+cmake --build build
+```
+
+II. Create Git 
+
+1. Create .gitignore
+```
+# Build directory
+build/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# IDE
+.vscode/
+.idea/
+.vs/
+
+# Visual Studio
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Executables
+*.exe
+*.out
+```
+
+2. init git and commit
+```
+git init
+git add .
+git commit -m "Initial C++ project with CMake"
+```
+
+3. Tạo repo trên github
+
+4. Connect local with github
+
+III. Add UnitTest with GoogleTest
+
+1. Tạo class Calculator -> see change in git commit
+
+Build Cmake again, and run to see a result
+
+2. Add GoogleTest
+
+Sử dụng 'FetchContent' cho practice
+
+- Update CMakeLists.txt
+
+- Tạo UnitTest: CalculatorTest.cpp
+
+- Build:
+
+```
+Remove-Item -Recurse -Force build
+cmake -S . -B build
+cmake --build build
+```
+
+- Run Test
+
+```
+cmake --build build
+```
+
+Knowledge:
+
+GoogleTest là framework để viết test
+```
+TEST()
+EXPECT_EQ()
+```
+
+CTest là tool CMake để quản lý Test
+
+IV. Tạo CI với GitHub Actions
+
+1. Tạo file ci.yml trong .github/workflows
+
+on:
+```
+on:
+  push:
+    branches:
+      - main
+
+    pull_request:
+    branches:
+        - main
+```
+Khi có push vào nhánh main thì chạy CI
+Khi có PR vào merger vào nhánh main cũng chạy CI
+
+jobs:
+```
+jobs:
+├── build-and-test
+├── static-analysis
+├── windows-build
+└── release
+```
+
+```
+jobs:
+  build-and-test:
+
+    runs-on: ubuntu-latest
+    // GitHub sẽ tạo ra một máy Ubuntu tạm thời để chạy CI.
+    // Sau khi job kết thúc, machine này sẽ bị hủy
+```
+
+2. Push lên GitHub
+
+3. Xem CI chạy
+
+4. Thử nghiệm CI fail -> Sửa UnitTest -> Push lên git
+
+5. Sửa lại cho đúng rồi push lên git
+
+-> Pipeline hiện tại 
+
+```
+                  GitHub
+                     │
+              git push / PR
+                     │
+                     ▼
+              ┌─────────────┐
+              │ C++ CI       │
+              └──────┬──────┘
+                     │
+                     ▼
+             Ubuntu Runner
+                     │
+             ┌───────┴────────┐
+             ▼                ▼
+         CMake Build       CTest
+             │                │
+             └───────┬────────┘
+                     ▼
+                 PASS / FAIL
+```
+
+V. Code Formatting với clang-format.
+
+CI sẽ kiểm tra code có tuân thủ code style không?
+
+1. Cài clang-format ở local
+
+Cài đến khi có thể chạy
+```
+clang-format --version
+```
+
+2. Tạo file .clang-format
+
+3. Format toàn bộ code
+
+powershell sau, sau đó commit
+```
+Get-ChildItem -Path . -Include *.cpp,*.h -Recurse |
+ForEach-Object {
+    clang-format -i $_.FullName
+}
+```
+
+4. Kiểm tra format local
+```
+clang-format --dry-run --Werror src/main.cpp
+```
+Nếu có lỗi -> báo lỗi. Hãy thử tạo lỗi để xem kqua
+
+5. Thêm Format Check vào GitHub Actions -> thêm vào ci.yml
+
+6. Push lên git
+
+7. Cố tình làm CI fail
+
+Sau đó format lại:
+```
+clang-format -i src/Calculator.cpp
+```
+
+VI. clang-tidy Static Analysis
+
+1. Kiểm tra clang-tidy local
+```
+clang-tidy --version
+```
+
+2. Tạo .clang-tidy
+
+```
+Checks: >
+  bugprone-*,   ------------> Tìm những code pattern có khả năng gây bug
+  performance-*,      --------> Tìm những đoạn code có thể gây vấn đề performance
+  modernize-*,        --------> Gợi ý dùng C++ hiện đại hơn
+  readability-*,      --------> Kiểm tra readability/code practice
+  -readability-identifier-length
+
+WarningsAsErrors: ''    ----------> Warning k làm CI fail
+HeaderFilterRegex: '^(include|src|tests)/'
+```
+
+3. Chạy clang-tidy local
+```
+cmake -S . -B build
+cmake --build build
+```
+```
+clang-tidy \
+    src/Calculator.cpp \
+    -- \
+    -Iinclude
+```
+hoặc:
+```
+clang-tidy src/Calculator.cpp -- -Iinclude
+```
+
+4. Bật compile_commands.json
+
+update CMakeLists.txt
+
+```
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+```
+
+Sau đó xóa build và build lại bằng Ninja để tạo file compile_commands.json.
+
+Nếu chưa có Ninja -> cài nó
+
+```
+Remove-Item -Recurse -Force build
+cmake -S . -B build -G "Ninja"
+cmake --build build
+```
+
+Expected -> thấy file compile_commands.json tại build/
+
+5. Chạy clang-tidy bằng compile database
+
+```
+clang-tidy -p build src/Calculator.cpp
+```
+
+-p build: lấy copile config từ build/compile_commands.json
+
+6. Thêm clang-tidy vào CI.yml
+
+VII. Multi platform CI
+
+Update ci.yml
+
+- Thay vì tạo 2 yml -> sử dụng matrix
+
+- fail-fast: false ---> Fail vẫn chạy tiếp
+
+- Lưu ý quan trọng
+
++ Step format hiện tại dùng 'find' 'xargs' -> chỉ dùng cho Ubuntu
+
++ Nên cần thêm điều kiện 'if' vào clang-format và clang-tidy
+
+
+VIII. CD (Continuous Delivery/Development)
+
+1. Tạo release workflow -> create release.yml
+
+- Trigger CD bằng Git Tag 'v*'
+
+- Thêm build Linux với '-DCMAKE_BUILD_TYPE=Release' và '--config Release'
+
+- Thêm build windows với '--config Release'
+
+- Đóng gòi file release thành artifact
+```
+cpp-ci-cd-linux-v1.0.0.tar.gr
+cpp-ci-cd-windows-v1.0.0.zip
+```
+
+- Upload artifact
+
+- Tạo github release
+```
+    needs:
+      - build-linux
+      - build-windows
+```
+Chỉ chạy khi 2 job đều thành công
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
