@@ -454,6 +454,8 @@ update ci.yml
 
 - Chú ý: phần key - lưu hash của CMakeLists.txt
 
+- Commit lại để thấy cache đã được lưu
+
 
                     
 
