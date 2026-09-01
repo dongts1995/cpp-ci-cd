@@ -520,6 +520,74 @@ Sửa config CMake
 
 5. Thử push để xem kết quả trước
 
+- build (clang, clang++) -> PASS
+
+- build (gcc, g++) -> PASS
+
+- quality -> FAIL
+
+- test -> FAIL
+
+6. Thêm Matrix cho Test
+
+- Thêm strategy cho test
+```
+    strategy:
+      fail-fast: false
+
+      matrix:
+        compiler:
+          - g++
+          - clang++
+```
+
+- Update tên Artifact
+
+- Vấn đề: phần matrix không giống phần build -> thêm tên cho matrix
+```
+      matrix:
+        compiler:
+          - name: gcc
+            cc: gcc
+            cxx: g++
+          - name: clang
+            cc: clang
+            cxx: clang++
+```
+```
+      matrix:
+        compiler:
+          - gcc
+          - clang
+```
+
+7. Push để xem kết quả
+```
+                         Build Matrix
+                       /             \
+                      /               \
+                     ▼                 ▼
+               Build GCC          Build Clang
+                    │                 │
+                    │                 │
+                    ▼                 ▼
+               build-gcc         build-clang
+                    │                 │
+                    ▼                 ▼
+                Test GCC          Test Clang
+                    │                 │
+                    └────────┬────────┘
+                             │
+                             ▼
+                          Quality
+                             │
+                             ▼
+                            Gate
+```
+
+
+
+
 
 
 
