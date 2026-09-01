@@ -50,5 +50,8 @@ jobs:
           name: build-linux
           path: build
 
+      - name: Restore executable permission
+        run: chmod +x build/unit_tests
+
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
