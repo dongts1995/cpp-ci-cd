@@ -20,6 +20,15 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      - name: Cache CMake dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/_deps
+          key: ${{ runner.os }}-cmake-${{ hashFiles('CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
       - name: Configure CMake
         run: cmake -S . -B build
 
@@ -101,4 +110,3 @@ jobs:
       - name: CI Quality Gate
         run: echo "All CI checks passed!"
 
-        

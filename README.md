@@ -422,6 +422,38 @@ Chú ý trước khi test, sau khi download phải cấp quyền excutive cho n�
                      CD
 ```
 
+X. Quản lý dependence C++
+
+- Hiện tại project đang sử dụng GoogleTest thông qua FetchContent online
+
+- Có nghĩa là mỗi lần CI chạy: Github Runner > CMake > Internet > Download GoogleTest > Build
+
+- Nếu GitHub Dependence gặp vấn đề thì CI fail -> Đây là một vấn đề quan trọng
+
+1. Về FetchContent:
+
+- Hiện tại đang down từ URL: https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+
+- Version cố định là một điểm tốt. Không nên để latest
+
+2. Dependence Management có 3 lớp cần quan tâm:
+
+- Version
+
+- Source
+
+- Reproducibility: phải có khả năng build lại sau này cùng dependency version 
+
+3. Vấn đề CI hiện tại
+
+- Mỗi Github Runner là một môi trường mới -> download lại dependency -> Cần Cache
+
+4. Thêm Cache cho CMake
+
+update ci.yml
+
+- Chú ý: phần key - lưu hash của CMakeLists.txt
+
 
                     
 
