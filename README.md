@@ -627,7 +627,21 @@ git checkout -b feature/test-ci
 ```
 2. Push và tạo PR - Quan sát quá trình CI
 
+=> PASS
+
 3. Thử với một PR fail. Push và tạo PR - Quan sát quá trình CI
+
+=> FAIL
+
+Nhưng vẫn Merger được
+
+4. Bật Rule
+
+- Vào Setting > Rulesets để tạo rule
+
+- Require a pull request before merging
+
+- Require status checks to pass before merging > Add 'gate'
 
 
                     
