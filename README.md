@@ -389,6 +389,41 @@ Chú ý trước khi test, sau khi download phải cấp quyền excutive cho n�
 ```
 
                         
+5. Tạo Quality Gate
+
+- thêm gate vào ci.yml
+
+```
+                    SOURCE
+                       │
+                    git push
+                       │
+                       ▼
+                    ┌─────┐
+                    │Build│
+                    └──┬──┘
+                       │
+              ┌────────┴────────┐
+              │                 │
+              ▼                 ▼
+           ┌──────┐         ┌─────────┐
+           │ Test │         │ Quality │
+           └───┬──┘         └────┬────┘
+               │                 │
+               └────────┬────────┘
+                        ▼
+                   ┌─────────┐
+                   │  Gate   │
+                   └────┬────┘
+                        │
+                       PASS
+                        │
+                        ▼
+                     CD
+```
+
+
+                    
 
 
 

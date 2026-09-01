@@ -86,3 +86,19 @@ jobs:
           clang-tidy \
             -p build \
             src/Calculator.cpp
+
+
+  gate:
+
+    needs:
+      - test
+      - quality
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: CI Quality Gate
+        run: echo "All CI checks passed!"
+
+        
