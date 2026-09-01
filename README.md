@@ -585,7 +585,35 @@ Sửa config CMake
                             Gate
 ```
 
+Fail Quality
 
+8. Thêm quality matrix
+
+- Sửa artifact download
+
+- Clang-tidy bản thân là Clang-based static analyzer. Nên chúng ta chỉ cần chạy Clang-tidy 1 lần
+
+- Nhưng để hiểu matrix tốt hơn -> Quality cho cả GCC và Clang
+
+9. Push để xem kết quả
+
+```
+                         BUILD
+                    ┌──────┴──────┐
+                    ↓             ↓
+                  GCC           Clang
+                    │             │
+                    ↓             ↓
+                  TEST          TEST
+                    │             │
+                    │             │
+                    ↓             ↓
+                QUALITY        QUALITY
+                    │             │
+                    └──────┬──────┘
+                           ↓
+                          GATE
+```
 
 
 

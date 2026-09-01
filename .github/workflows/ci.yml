@@ -91,6 +91,14 @@ jobs:
 
     needs: build
 
+    strategy:
+      fail-fast: false
+
+      matrix:
+        compiler:
+          - gcc
+          - clang
+
     runs-on: ubuntu-latest
 
     steps:
@@ -101,7 +109,7 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-linux
+          name: build-${{ matrix.compiler }}
           path: build
 
       - name: Check code formatting
