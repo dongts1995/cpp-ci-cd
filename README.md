@@ -619,6 +619,13 @@ Pass all
 
 10. Thử với Quality fail (bỏ dấu cách trong hàm add) -> Push thử để xem kqua
 
+XII. CI cho Pull Request
+
+1. Tạo branch
+```
+git checkout -b feature/test-ci
+```
+2. Push và tạo PR - Quan sát quá trình CI
 
 
 
