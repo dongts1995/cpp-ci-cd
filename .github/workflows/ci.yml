@@ -55,3 +55,34 @@ jobs:
 
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
+
+
+  quality:
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-linux
+          path: build
+
+      - name: Check code formatting
+        run: |
+          find src include tests \
+            -type f \
+            \( -name "*.cpp" -o -name "*.h" \) \
+            -print0 | xargs -0 clang-format --dry-run --Werror
+
+      - name: Run clang-tidy
+        run: |
+          clang-tidy \
+            -p build \
+            src/Calculator.cpp

@@ -361,6 +361,8 @@ Build > Upload Artifact > Github Storage
 
 Build > Upload Artifact > Github Storage > Test Job > Download Artifact > CTest
 
+Chú ý trước khi test, sau khi download phải cấp quyền excutive cho nó -> tránh lỗi [permission denied]
+
 3. Quality Job
 
 4. Finaly
