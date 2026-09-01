@@ -615,6 +615,10 @@ Fail Quality
                           GATE
 ```
 
+Pass all
+
+10. Thử với Quality fail (bỏ dấu cách trong hàm add) -> Push thử để xem kqua
+
 
 
 
