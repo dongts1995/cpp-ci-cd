@@ -456,6 +456,72 @@ update ci.yml
 
 - Commit lại để thấy cache đã được lưu
 
+XI. Build matrix với nhiều complier
+
+C++ complier khác nhau có thể phát hiện những vấn đề khác nhau
+
+Chúng ta muốn 
+```
+                    Build
+                      │
+              ┌───────┴───────┐
+              ▼               ▼
+            GCC             Clang
+              │               │
+              ▼               ▼
+            Test             Test
+```
+
+1. Kiểm tra clang,g++ local
+```
+clang++ --version
+g++ --version
+```
+
+2. Thay đổi build jobs
+
+> update ci.yml
+
+```
+build:
+
+  strategy:
+    fail-fast: false
+
+    matrix:
+      compiler:
+        - gcc
+        - clang
+
+  runs-on: ubuntu-latest
+```
+
+3. Chọn complier
+
+Để dễ dúng, sửa matrix:
+```
+  matrix:
+    compiler:
+      - cc: gcc
+        cxx: g++
+      - cc: clang
+        cxx: clang++
+```
+Sửa config CMake
+```
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+```
+
+4. Sửa tên key và artifact name
+
+5. Thử push để xem kết quả trước
+
+
+
 
                     
 
