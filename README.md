@@ -627,7 +627,7 @@ git checkout -b feature/test-ci
 ```
 2. Push và tạo PR - Quan sát quá trình CI
 
-
+3. Thử với một PR fail. Push và tạo PR - Quan sát quá trình CI
 
 
                     
