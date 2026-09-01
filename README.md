@@ -341,9 +341,52 @@ Chỉ chạy khi 2 job đều thành công
 
 
 
+IX. Tách CI thành nhiều job - quality gate
 
+- Hiện tại pipeline đang có dạng : CI > build and test
 
+- Nên tách thành
 
++ build
++ test (unit test)
++ quality (format , tidy)
+
+- Nhưng mỗi Github Action Job chạy trên runner riêng, để build xong test, cần Artifact
+
+1. Build Artifact
+
+Build > Upload Artifact > Github Storage
+
+2. Test Job download Artifact
+
+Build > Upload Artifact > Github Storage > Test Job > Download Artifact > CTest
+
+3. Quality Job
+
+4. Finaly
+
+```
+                         CI
+                          │
+                     ┌────┴────┐
+                     │  Build  │
+                     └────┬────┘
+                          │
+                 ┌────────┴────────┐
+                 ▼                 ▼
+              Test             Quality
+                 │                 │
+                 │           ┌─────┴─────┐
+                 │           ▼           ▼
+                 │       format       clang-tidy
+                 │           │           │
+                 └───────────┴───────────┘
+                             │
+                             ▼
+                          CI PASS
+```
+
+                        
 
 
 

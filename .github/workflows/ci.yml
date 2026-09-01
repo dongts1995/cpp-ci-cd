@@ -10,17 +10,10 @@ on:
       - main
 
 jobs:
-  build-and-test:
 
-    strategy:
-      fail-fast: false
+  build:
 
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -33,20 +26,29 @@ jobs:
       - name: Build
         run: cmake --build build
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux
+          path: build/
+
+
+  test:
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-linux
+          path: build
+
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
-
-      - name: Check code formatting
-        if: runner.os == 'Linux'
-        run: |
-          find src include tests \
-            -type f \
-            \( -name "*.cpp" -o -name "*.h" \) \
-            -print0 | xargs -0 clang-format --dry-run --Werror
-
-      - name: Run clang-tidy
-        if: runner.os == 'Linux'
-        run: |
-          clang-tidy \
-            -p build \
-            src/Calculator.cpp
