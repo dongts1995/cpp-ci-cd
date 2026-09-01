@@ -313,6 +313,36 @@ Update ci.yml
 + Nên cần thêm điều kiện 'if' vào clang-format và clang-tidy
 
 
+VIII. CD (Continuous Delivery/Development)
+
+1. Tạo release workflow -> create release.yml
+
+- Trigger CD bằng Git Tag 'v*'
+
+- Thêm build Linux với '-DCMAKE_BUILD_TYPE=Release' và '--config Release'
+
+- Thêm build windows với '--config Release'
+
+- Đóng gòi file release thành artifact
+```
+cpp-ci-cd-linux-v1.0.0.tar.gr
+cpp-ci-cd-windows-v1.0.0.zip
+```
+
+- Upload artifact
+
+- Tạo github release
+```
+    needs:
+      - build-linux
+      - build-windows
+```
+Chỉ chạy khi 2 job đều thành công
+
+
+
+
+
 
 
 
