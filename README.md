@@ -643,7 +643,7 @@ Nhưng vẫn Merger được
 
 - Require status checks to pass before merging > Add 'gate'
 
-
+- Quan trọng là phải Active
                     
 
 
