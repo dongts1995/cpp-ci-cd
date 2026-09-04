@@ -646,6 +646,9 @@ Nhưng vẫn Merger được
 - Quan trọng là phải Active
                     
 
+XIII. 
+
+1. Sửa Gate thật sự kiểm tra CI
 
 
 

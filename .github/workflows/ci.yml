@@ -138,6 +138,14 @@ jobs:
 
     steps:
 
-      - name: CI Quality Gate
+      - name: Check CI results
+        if: ${{ needs.test.result == 'success' && needs.quality.result == 'success' }}
         run: echo "All CI checks passed!"
 
+      - name: Fail CI Gate
+        if: ${{ needs.test.result != 'success' || needs.quality.result != 'success' }}
+        run: |
+          echo "CI checks failed."
+          echo "Test result: ${{ needs.test.result }}"
+          echo "Quality result: ${{ needs.quality.result }}"
+          exit 1
