@@ -726,7 +726,7 @@ Package Linux      Package Windows
        GitHub Release
 ```
 
-
+4. Dọn release.yml cũ + hoàn thiện kiến trúc
 
 
 
