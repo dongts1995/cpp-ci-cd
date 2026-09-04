@@ -835,6 +835,15 @@ push: false
 
 - Push commit và xem thời gian
 
+6. Push Docker Image lên GitHub Container Registry (GHCR)
+
+- Thêm permission
+```
+packages: write cho phép workflow push Docker image lên GHCR.
+```
+
+
+
 
 
 
