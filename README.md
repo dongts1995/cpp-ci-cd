@@ -650,6 +650,34 @@ XIII.
 
 1. Sửa Gate thật sự kiểm tra CI
 
+2. Tạo Release Build Artifact trong CI
+
+Thêm job release-build-linux và release-build-windows
+
+```
+                    Build Matrix
+                 ┌──────┴──────┐
+                GCC          Clang
+                 │              │
+                 └──────┬───────┘
+                        ↓
+                  ┌───────────┐
+                  │   Test    │
+                  │  Quality  │
+                  └─────┬─────┘
+                        ↓
+                       Gate
+                        │
+                 ┌──────┴──────┐
+                 ↓             ↓
+          Linux Release   Windows Release
+                 │             │
+                 ↓             ↓
+          release-linux  release-windows
+```
+
+
+
 
 
 
