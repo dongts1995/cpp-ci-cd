@@ -729,6 +729,94 @@ Package Linux      Package Windows
 4. Dọn release.yml cũ + hoàn thiện kiến trúc
 
 
+XIV. Docker / Container CI/CD
+
+Mục tiêu:
+```
+GIt Push > CI > Test > Docker Build > Docker Image > Push Registry > Deploy
+```
+
+1. Tạo dockerfile
+
+- Container bắt đầu từ Ubuntu.
+
+- Docker tạo và chuyển vào /app
+
+- Cài compiler và build tôols
+
+- COPY . . -- copy cpp-ci-cd vào app
+
+- Build
+
+- CMD ["./build/cpp_ci_cd"] - Đây là command mặc định khi container được chạy.
+
+2. Build Docker image
+
+- Tải Docker Desktop
+
+- Mở Docker và chờ trạng thái Running
+
+- Thêm .dockerignore
+```
+build/
+.git/
+.vscode/
+*.user
+*.suo
+```
+
+- Chạy:
+```
+docker build -t cpp-ci-cd:1.0 .
+```
++ Build docker image
+
++ Tên là cpp-ci-cd - Version 1.0
+
++ Thư mục hiện tại
+
+- Kiểm tra
+```
+docker images
+```
+
+- Chạy container
+```
+docker run --rm cpp-ci-cd:1.0
+```
+
++ Chạy docker image
+
++ Chạy xong tự động xóa
+
++ Chạy file với tên và version
+
+3. Multi-stage Docker Build
+
+Để loại bỏ các phần k cần thiết trong lúc Runtime -> chia thành 2 stage: Buildẻ và Runtime
+
+-> Update dockerfile
+```
+COPY --from=builder /app/build/cpp_ci_cd .
+```
+-> Lấy file cpp-ci-cd từ stage buider sang runtime
+
+Build và run lại.
+
+4. Đưa Docker lên git
+
+Mục tiêu:
+```
+Gate
+ ↓
+Docker Build
+ ↓
+Docker Image
+```
+
+- Thêm 'docker-build:' sau 'gate:'
+
+- Sử dụng 'docker build -t cpp-ci-cd:${{ github.sha }} .' thay vì version cụ thể
 
 
 

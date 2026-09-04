@@ -152,6 +152,19 @@ jobs:
           echo "Quality result: ${{ needs.quality.result }}"
           exit 1
 
+  docker-build:
+    needs: gate
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t cpp-ci-cd:${{ github.sha }} .
+
   release-build-linux:
 
     if: startsWith(github.ref, 'refs/tags/v')
