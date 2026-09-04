@@ -818,6 +818,23 @@ Docker Image
 
 - Sử dụng 'docker build -t cpp-ci-cd:${{ github.sha }} .' thay vì version cụ thể
 
+- Push lên git và quan sát. Lúc này project có thể được đóng gói thành docker image chứ chưa được lưu vào Docker Hub/GHCR
+
+5. Docker Build Cache trong GitHub Actions
+
+- Lấy Docker cache từ GitHub Actions cache. Lưu Docker build layers vào GitHub Actions cache.
+```
+cache-from: type=gha
+cache-to: type=gha,mode=max
+```
+
+- Không push image lên registry. Chỉ build.
+```
+push: false
+```
+
+- Push commit và xem thời gian
+
 
 
 
