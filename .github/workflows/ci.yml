@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 
   pull_request:
     branches:
@@ -152,6 +154,8 @@ jobs:
 
   release-build-linux:
 
+    if: startsWith(github.ref, 'refs/tags/v')
+
     needs: gate
 
     runs-on: ubuntu-latest
@@ -180,6 +184,8 @@ jobs:
 
   release-build-windows:
 
+    if: startsWith(github.ref, 'refs/tags/v')
+
     needs: gate
 
     runs-on: windows-latest
@@ -203,3 +209,106 @@ jobs:
         with:
           name: release-windows
           path: build/Release/cpp_ci_cd.exe
+
+  package-linux:
+
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    needs: release-build-linux
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Download Linux Release artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-linux
+          path: build
+
+      - name: Package Linux
+        run: |
+          mkdir package
+          cp build/cpp_ci_cd package/
+          cp README.md package/
+          tar -czf cpp-ci-cd-linux-${{ github.ref_name }}.tar.gz package
+
+      - name: Upload Linux package
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-linux
+          path: cpp-ci-cd-linux-*.tar.gz
+
+  package-windows:
+
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    needs: release-build-windows
+
+    runs-on: windows-latest
+
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Download Windows Release artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-windows
+          path: build
+
+      - name: Package Windows
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force package
+          Copy-Item build/cpp_ci_cd.exe package/
+          Copy-Item README.md package/
+          Compress-Archive `
+            -Path package/* `
+            -DestinationPath cpp-ci-cd-windows-${{ github.ref_name }}.zip
+
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-windows
+          path: cpp-ci-cd-windows-*.zip
+
+  create-release:
+
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    needs:
+      - package-linux
+      - package-windows
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+
+      - name: Download Linux package
+        uses: actions/download-artifact@v4
+        with:
+          name: package-linux
+          path: artifacts/linux
+
+      - name: Download Windows package
+        uses: actions/download-artifact@v4
+        with:
+          name: package-windows
+          path: artifacts/windows
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/linux/*
+            artifacts/windows/*
+          generate_release_notes: true
+

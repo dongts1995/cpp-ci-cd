@@ -675,6 +675,58 @@ Thêm job release-build-linux và release-build-windows
                  ↓             ↓
           release-linux  release-windows
 ```
+3. Cho CD dùng Artifact từ CI
+
+Artifact giữa các job trong cùng workflow rất dễ truyền bằng upload-artifact → download-artifact.
+
+Còn:
+
+Artifact giữa hai workflow độc lập không tự động được chia sẻ theo cách đơn giản đó.
+
+Trước tiên ta gộp Release Build vào cùng workflow CI:
+
+- Sửa trigger tại 'on:' -> thêm tags:
+
+- Thêm điều kiện cho release build: 'if: startsWith(github.ref, 'refs/tags/v')'
+
+- Thêm job packet-linux và packet-windows 
+
+- Thêm 'create-release:'
+
+- Kiến trúc hoàn chỉnh bây giờ là:
+
+```
+                         build
+                    ┌──────┴──────┐
+                   GCC           Clang
+                    │               │
+                    └──────┬────────┘
+                           ↓
+                    ┌──────────────┐
+                    │ Test Quality │
+                    └───────┬──────┘
+                            ↓
+                           Gate
+                            │
+              ┌─────────────┴─────────────┐
+              │                           │
+          tag v*                       main / PR
+              │                           │
+              ↓                           X
+     ┌──────────────────┐
+     │                  │
+     ↓                  ↓
+Linux Release      Windows Release
+     │                  │
+     ↓                  ↓
+Package Linux      Package Windows
+     │                  │
+     └────────┬─────────┘
+              ↓
+       GitHub Release
+```
+
+
 
 
 
