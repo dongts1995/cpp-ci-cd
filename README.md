@@ -842,6 +842,16 @@ push: false
 packages: write cho phép workflow push Docker image lên GHCR.
 ```
 
+- Push lên git và kiểm tra 'Packages'
+
+7. Tag Docker Image theo Version
+
+- Tạo Docker chỉ khi push vào main hoặc theo Tag
+
+-> Thêm 'if:'
+
+- Sửa 'tags' để có thể tạo ra 2 tag, 1 tag version hoặc main, 1 tag là SHA
+
 
 
 
